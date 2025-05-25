@@ -46,7 +46,7 @@ jobs:
         id: version
         run: |
           version=$(grep -m 1 '<version>' pom.xml | sed -E 's/.*<version>(.+)<\/version>.*/\1/')
-          version_sanitized=$(echo "$version" | sed 's/\./_/g')
+          version_sanitized=$(echo "$version" | sed 's/[.-]/_/g')
           zip_name="bolo_${version_sanitized}.zip"
           echo "Extracted version: $version"
           echo "zip_name=$zip_name" >> $GITHUB_OUTPUT
@@ -60,6 +60,7 @@ jobs:
 
       - name: Upload bolo_*.zip to UpYun
         run: |
+          echo "Uploading to URL: ${{ secrets.UPYUN_UPLOAD_URL }}/${{ steps.version.outputs.zip_name }}"
           curl --silent --show-error -T "zip-output/${{ steps.version.outputs.zip_name }}" \
             ${{ secrets.UPYUN_UPLOAD_URL }}/${{ steps.version.outputs.zip_name }} \
             -u "${{ secrets.UPYUN_OPERATOR }}:${{ secrets.UPYUN_PASSWORD }}"
