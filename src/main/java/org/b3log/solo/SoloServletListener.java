@@ -45,8 +45,10 @@ import org.b3log.solo.bolo.waf.WAF;
 import org.b3log.solo.event.B3ArticleSender;
 import org.b3log.solo.event.B3ArticleUpdater;
 import org.b3log.solo.event.DeleteArticleListener;
+import org.b3log.solo.event.DeleteFollowListener;
 import org.b3log.solo.event.FishPiArticleSender;
 import org.b3log.solo.event.FishPiArticleUpdater;
+import org.b3log.solo.event.FollowArticleRefresher;
 import org.b3log.solo.event.PluginRefresher;
 import org.b3log.solo.model.Option;
 import org.b3log.solo.processor.InitCheckHandler;
@@ -168,25 +170,25 @@ public final class SoloServletListener extends AbstractServletListener {
         pluginManager.load();
 
         String header = "" +
-                "████████████████████████████████████████████████████████████████████████\n" +
-                "█                                      █                               █\n" +
-                "█  ██████╗  ██████╗ ██╗      ██████╗   █                               █\n" +
-                "█  ██╔══██╗██╔═══██╗██║     ██╔═══██╗  █  Welcome to Bolo :)           █\n" +
-                "█  ██████╔╝██║   ██║██║     ██║   ██║  █                               █\n" +
-                "█  ██╔══██╗██║   ██║██║     ██║   ██║  █  github.com/adlered/bolo-solo █\n" +
-                "█  ██████╔╝╚██████╔╝███████╗╚██████╔╝  █  CurrentVersion: " + BOLO_VERSION_EN + "█\n" +
-                "█  ╚═════╝  ╚═════╝ ╚══════╝ ╚═════╝   █                               █\n" +
-                "█                                      █                               █\n" +
-                "████✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩████\n" +
-                "█               THANK YOU FOR YOUR CONTRIBUTION TO BOLO !              █\n" +
-                "████✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩████\n" +
-                "█     adlered    (Author)         █    https://github.com/adlered      █\n" +
-                "█     expoli     (Contributor)    █    https://github.com/expoli       █\n" +
-                "█     zeekling   (Contributor)    █    https://github.com/zeekling     █\n" +
-                "█     csfwff     (Contributor)    █    https://github.com/csfwff       █\n" +
-                "█     teahouse   (Contributor)    █    https://github.com/teahouse15   █\n" +
-                "█     Gakkiyomi  (Contributor)    █    https://github.com/gakkiyomi    █\n" +
-                "████████████████████████████████████████████████████████████████████████\n" +
+                "█████████████████████████████████████████████████████████████████████████\n" +
+                "█                                      █                                █\n" +
+                "█  ██████╗  ██████╗ ██╗      ██████╗   █                                █\n" +
+                "█  ██╔══██╗██╔═══██╗██║     ██╔═══██╗  █      Welcome to Bolo :)        █\n" +
+                "█  ██████╔╝██║   ██║██║     ██║   ██║  █                                █\n" +
+                "█  ██╔══██╗██║   ██║██║     ██║   ██║  █ github.com/bolo-blog/bolo-solo █\n" +
+                "█  ██████╔╝╚██████╔╝███████╗╚██████╔╝  █  CurrentVersion: " + BOLO_VERSION_EN + " █\n" +
+                "█  ╚═════╝  ╚═════╝ ╚══════╝ ╚═════╝   █                                █\n" +
+                "█                                      █                                █\n" +
+                "████✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩█████\n" +
+                "█               THANK YOU FOR YOUR CONTRIBUTION TO BOLO !               █\n" +
+                "████✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩✩█████\n" +
+                "█     adlered    (Author)         █    https://github.com/adlered       █\n" +
+                "█     expoli     (Contributor)    █    https://github.com/expoli        █\n" +
+                "█     zeekling   (Contributor)    █    https://github.com/zeekling      █\n" +
+                "█     csfwff     (Contributor)    █    https://github.com/csfwff        █\n" +
+                "█     teahouse   (Contributor)    █    https://github.com/teahouse15    █\n" +
+                "█     Gakkiyomi  (Contributor)    █    https://github.com/gakkiyomi     █\n" +
+                "█████████████████████████████████████████████████████████████████████████\n" +
                 " \n" +
                 "┌\n" +
                 "├　　HTTP Server Running On:　" + Latkes.getServePath() + "\n" +
@@ -329,6 +331,12 @@ public final class SoloServletListener extends AbstractServletListener {
             eventManager.registerListener(fishPiArticleUpdater);
             final DeleteArticleListener deleteArticleListener = beanManager.getReference(DeleteArticleListener.class);
             eventManager.registerListener(deleteArticleListener);
+            final FollowArticleRefresher followArticleRefresher = beanManager
+                    .getReference(FollowArticleRefresher.class);
+            eventManager.registerListener(followArticleRefresher);
+            final DeleteFollowListener deleteFollowListener = beanManager
+                    .getReference(DeleteFollowListener.class);
+            eventManager.registerListener(deleteFollowListener);
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, "Register event handlers failed", e);
 

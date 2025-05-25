@@ -22,6 +22,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.b3log.latke.Keys;
+import org.b3log.latke.event.Event;
+import org.b3log.latke.event.EventManager;
 import org.b3log.latke.ioc.Inject;
 import org.b3log.latke.logging.Level;
 import org.b3log.latke.logging.Logger;
@@ -33,6 +35,7 @@ import org.b3log.latke.service.ServiceException;
 import org.b3log.latke.service.annotation.Service;
 import org.b3log.latke.util.Paginator;
 import org.b3log.solo.cache.FollowArticleCache;
+import org.b3log.solo.event.EventTypes;
 import org.b3log.solo.model.Article;
 import org.b3log.solo.model.Follow;
 import org.b3log.solo.repository.FollowRepository;
@@ -62,6 +65,9 @@ public class FollowService {
 
     @Inject
     private FollowArticleCache articleCache;
+
+    @Inject
+    private EventManager eventManager;
 
     /**
      * Gets follows by the specified request json object.
@@ -162,6 +168,22 @@ public class FollowService {
         }
     }
 
+    public JSONObject getFollowByTitle(final String followTitle) throws ServiceException {
+        final JSONObject ret = new JSONObject();
+
+        try {
+            final JSONObject follow = followRepository.getByTitle(followTitle);
+
+            ret.put(Follow.FOLLOW, follow);
+
+            return ret;
+        } catch (final Exception e) {
+            LOGGER.log(Level.ERROR, "Gets a follow failed", e);
+
+            throw new ServiceException(e);
+        }
+    }
+
     /**
      * Removes a follow specified by the given follow id.
      *
@@ -172,8 +194,9 @@ public class FollowService {
         final Transaction transaction = followRepository.beginTransaction();
 
         try {
+            final JSONObject follow = followRepository.get(followId);
             followRepository.remove(followId);
-
+            eventManager.fireEventAsynchronously(new Event<>(EventTypes.DELETE_FOLLOW, follow));
             transaction.commit();
         } catch (final Exception e) {
             if (transaction.isActive()) {
@@ -210,7 +233,7 @@ public class FollowService {
             follow.put(Follow.FOLLOW_ORDER, oldfollow.getInt(Follow.FOLLOW_ORDER));
 
             followRepository.update(followId, follow);
-
+            eventManager.fireEventAsynchronously(new Event<>(EventTypes.FOLLOW_ARTICLE_REFRESH, follow));
             transaction.commit();
         } catch (final Exception e) {
             if (transaction.isActive()) {
@@ -300,7 +323,7 @@ public class FollowService {
             final String ret = followRepository.add(follow);
 
             transaction.commit();
-
+            eventManager.fireEventAsynchronously(new Event<>(EventTypes.FOLLOW_ARTICLE_REFRESH, follow));
             return ret;
         } catch (final Exception e) {
             if (transaction.isActive()) {
@@ -312,25 +335,33 @@ public class FollowService {
         }
     }
 
-    public void syncFollowArticles() {
+    public void syncAllFollowArticles() {
         try {
+            LOGGER.log(Level.INFO, "Syncs all follow articles");
             final List<JSONObject> res = followRepository.getList(new Query());
             if (null == res || res.isEmpty()) {
                 LOGGER.log(Level.WARN, "No follows to sync articles");
                 return;
             }
-            res.forEach(follow -> {
-                final String followName = follow.optString(Follow.FOLLOW_TITLE);
-                final String followAddress = follow.optString(Follow.FOLLOW_ADDRESS);
-                final String followIcon = follow.optString(Follow.FOLLOW_ICON);
-                // Syncs articles for the follow
-                final List<JSONObject> articles = new RssParser(followAddress, followIcon, followName).parse2Article();
-                LOGGER.log(Level.INFO, "Syncs follow articles, followName={0}, articleCount={1}",
-                        new Object[] { followName, articles.size() });
-                articleCache.putArticles(followName, articles.stream()
-                        .collect(Collectors.toMap(article -> article.optString(Article.ARTICLE_TITLE),
-                                Function.identity())));
-            });
+            res.forEach(follow -> syncFollowArticles(follow));
+        } catch (final Throwable e) {
+            LOGGER.log(Level.ERROR, "Syncs all follow articles failed", e);
+        }
+
+    }
+
+    public void syncFollowArticles(final JSONObject follow) {
+        try {
+            final String followName = follow.optString(Follow.FOLLOW_TITLE);
+            final String followAddress = follow.optString(Follow.FOLLOW_ADDRESS);
+            final String followIcon = follow.optString(Follow.FOLLOW_ICON);
+            // Syncs articles for the follow
+            final List<JSONObject> articles = new RssParser(followAddress, followIcon, followName).parse2Article();
+            LOGGER.log(Level.INFO, "Syncs follow articles, followName={0}, articleCount={1}",
+                    new Object[] { followName, articles.size() });
+            articleCache.putArticles(followName, articles.stream()
+                    .collect(Collectors.toMap(article -> article.optString(Article.ARTICLE_TITLE),
+                            Function.identity())));
         } catch (final Throwable e) {
             LOGGER.log(Level.ERROR, "Syncs follow articles failed", e);
         }

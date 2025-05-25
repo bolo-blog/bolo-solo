@@ -43,6 +43,10 @@ public class FollowArticleCache {
         return articles;
     }
 
+    public Map<String, JSONObject> removeFollowArticles(final String followName) {
+        return followArticleCache.remove(followName);
+    }
+
     public void putArticles(final String followName, final Map<String, JSONObject> articles) {
         followArticleCache.put(followName, articles);
     }

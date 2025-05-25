@@ -63,6 +63,7 @@ import org.b3log.solo.event.EventTypes;
 import org.b3log.solo.model.ArchiveDate;
 import org.b3log.solo.model.Article;
 import org.b3log.solo.model.Common;
+import org.b3log.solo.model.Follow;
 import org.b3log.solo.model.Option;
 import org.b3log.solo.model.Sign;
 import org.b3log.solo.model.Tag;
@@ -75,6 +76,7 @@ import org.b3log.solo.service.ArticleQueryService;
 import org.b3log.solo.service.CategoryQueryService;
 import org.b3log.solo.service.CommentQueryService;
 import org.b3log.solo.service.DataModelService;
+import org.b3log.solo.service.FollowService;
 import org.b3log.solo.service.OptionQueryService;
 import org.b3log.solo.service.StatisticMgmtService;
 import org.b3log.solo.service.TagQueryService;
@@ -158,6 +160,9 @@ public class ArticleProcessor {
 
     @Inject
     private FollowArticleCache followArticleCache;
+
+    @Inject
+    private FollowService followService;
 
     /**
      * Statistic management service.
@@ -770,6 +775,11 @@ public class ArticleProcessor {
             return;
         }
         try {
+            final JSONObject follow = followService.getFollowByTitle(followName);
+            if (null == follow.get(Follow.FOLLOW)) {
+                context.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
             final JSONObject preference = optionQueryService.getPreference();
             String specifiedSkin = Skins.getSkinDirName(context);
             if (StringUtils.isBlank(specifiedSkin)) {

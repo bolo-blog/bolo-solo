@@ -138,6 +138,7 @@ public class FollowConsole {
             ret.put(Keys.STATUS_CODE, true);
             ret.put(Keys.MSG, langPropsService.get("updateSuccLabel"));
             renderer.setJSONObject(ret);
+
         } catch (final Exception e) {
             LOGGER.log(Level.ERROR, e.getMessage(), e);
 
@@ -232,7 +233,6 @@ public class FollowConsole {
         try {
             final JSONObject requestJSON = context.requestJSON();
             final String followId = followService.addFollow(requestJSON);
-
             ret.put(Keys.OBJECT_ID, followId);
             ret.put(Keys.MSG, langPropsService.get("addSuccLabel"));
             ret.put(Keys.STATUS_CODE, true);

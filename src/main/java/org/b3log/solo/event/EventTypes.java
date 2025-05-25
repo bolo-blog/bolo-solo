@@ -52,6 +52,13 @@ public final class EventTypes {
     public static final String ADD_COMMENT_TO_PAGE = "Add Comment To Page";
 
     /**
+     * Indicates a modify follow article event.
+     */
+    public static final String FOLLOW_ARTICLE_REFRESH = "Follow Article Refresher";
+
+    public static final String DELETE_FOLLOW = "Delete Follow";
+
+    /**
      * Private constructor.
      */
     private EventTypes() {
