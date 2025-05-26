@@ -2,7 +2,8 @@ name: Upload-Bolo-War-To-Upyun
 
 on:
   release:
-    types: [published]
+    types:
+      - published
   workflow_dispatch:
     inputs:
       test_tag:
