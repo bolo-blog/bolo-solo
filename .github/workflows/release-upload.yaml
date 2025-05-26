@@ -10,9 +10,6 @@ on:
         description: 'Optional tag for manual upload (will override release tag)'
         required: false
         default: ''
-  push:
-    branches:
-      - chore/*
 jobs:
   upload-war:
     runs-on: ubuntu-latest
