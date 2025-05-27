@@ -72,6 +72,8 @@
                             class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div>
             <div class="menus_item"><a class="site-page" href="${servePath}/links.html"><i
                             class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div>
+            <div class="menus_item"><a class="site-page" href="${servePath}/follows.html"><i
+                            class="fa-fw fas fa-link"></i><span> 我的关注</span></a></div>
                 <#list pageNavigations as page>
                     <div class="menus_item">
                     <a class="site-page" href="${page.pagePermalink}" target="${page.pageOpenTarget}">
