@@ -65,7 +65,7 @@ public class RssParser {
                 final JSONObject article = new JSONObject();
                 article.put(Option.ID_C_BLOG_TITLE, feed.getTitle());
                 article.put(Option.ID_C_BLOG_SUBTITLE, feedDesc);
-                article.put(Article.ARTICLE_AUTHOR_ID, entry.getAuthor());
+                article.put(Article.ARTICLE_AUTHOR_ID, userName);
                 article.put(Keys.OBJECT_ID, entry.getAuthor());
                 article.put(Common.AUTHOR_NAME, entry.getAuthor());
                 article.put(Article.ARTICLE_TITLE, entry.getTitle());

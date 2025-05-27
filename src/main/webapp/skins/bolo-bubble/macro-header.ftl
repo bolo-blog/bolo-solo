@@ -92,6 +92,9 @@
                     <a href="${servePath}/links.html">${linkLabel}</a>
                 </li>
                 <li>
+                    <a href="${servePath}/follows.html">${followLabel}</a>
+                </li>
+                <li>
                     <a rel="alternate" href="${servePath}/rss.xml">RSS</a>
                 </li>
                 <#if interactive == "on">

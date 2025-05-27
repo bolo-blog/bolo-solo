@@ -19,9 +19,10 @@
 -->
 <div class="articles">
     <#list articles as article>
+    <#assign isRss = (article.isRss!false)?c == "true">
         <article class="item">
             <h2 class="item__title">
-                <a rel="bookmark" href="${servePath}${article.articlePermalink}">
+                <a rel="bookmark" href="${isRss?then(article.articlePermalink, servePath + article.articlePermalink)}">
                     ${article.articleTitle}
                 </a>
                 <#if article.articlePutTop>
@@ -31,14 +32,14 @@
                 </#if>
                 <#if article.hasUpdated>
                     <sup>
-                        <a href="${servePath}${article.articlePermalink}">
+                        <a href="${isRss?then(article.articlePermalink, servePath + article.articlePermalink)}">
                             ${updatedLabel}
                         </a>
                     </sup>
                 </#if>
             </h2>
             <a class="item__abstract" pjax-title="${article.articleTitle}"
-               href="${servePath}${article.articlePermalink}">
+               href="${isRss?then(article.articlePermalink, servePath + article.articlePermalink)}">
                 <#if article.articleAbstractText?length gt 80>
                     ${article.articleAbstractText[0..80]}
                 <#else>
@@ -47,9 +48,13 @@
             </a>
             <div class="fn__clear">
                 ${article.articleCreateDate?string("yyyy-MM-dd")} &nbsp;·&nbsp;
+                <#if article.authorId?? && article.authorId != "">
                 <a href="${servePath}/authors/${article.authorId}">${article.authorName}</a>
+                <#else>
+                <a href="${servePath}/follow/articles/${article.articleAuthorId}">${article.articleAuthorId}</a>
+                </#if>
                 &nbsp;·&nbsp;
-                <#if article.articleCategory != "">
+                <#if article.articleCategory?? && article.articleCategory != "">
                     <span>
                         <a class="item__tag" href="${servePath}/category/${article.categoryURI}">${article.articleCategory}</a>
                     </span>
@@ -65,14 +70,14 @@
                 <#if interactive == "on">
                 <#if article.articleCommentCount != 0>
                     &nbsp;·&nbsp;
-                    <a class="item__tag" href="${servePath}${article.articlePermalink}#comments">
+                    <a class="item__tag" href="${isRss?then(article.articlePermalink, servePath + article.articlePermalink)}#comments">
                         ${article.articleCommentCount} ${commentLabel}
                     </a>
                 </#if>
                 </#if>
                 <#if article.articleViewCount != 0>
                     &nbsp;·&nbsp;
-                    <a class="item__tag" href="${servePath}${article.articlePermalink}">
+                    <a class="item__tag" href="${isRss?then(article.articlePermalink, servePath + article.articlePermalink)}">
                         ${article.articleViewCount} ${viewLabel}
                     </a>
                 </#if>
