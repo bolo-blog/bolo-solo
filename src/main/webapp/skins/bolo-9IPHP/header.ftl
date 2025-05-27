@@ -71,6 +71,9 @@
                 <a rel="archive" href="${servePath}/links.html">
                     <i class="icon-link"></i> ${linkLabel}
                 </a>
+                <a rel="archive" href="${servePath}/follows.html">
+                    <i class="icon-link"></i> ${followLabel}
+                </a>
                 <a rel="alternate" href="${servePath}/rss.xml" rel="section">
                     <i class="icon-rss"></i> RSS
                 </a>
@@ -140,6 +143,11 @@
         <li>
             <a rel="archive" href="${servePath}/links.html">
                 <i class="icon-link"></i> ${linkLabel}
+            </a>
+        </li>
+        <li>
+            <a rel="archive" href="${servePath}/follows.html">
+                <i class="icon-link"></i> ${followLabel}
             </a>
         </li>
         <li>

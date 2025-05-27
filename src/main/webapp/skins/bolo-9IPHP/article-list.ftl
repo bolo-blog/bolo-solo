@@ -19,10 +19,11 @@
 -->
 <div>
     <#list articles as article>
+    <#assign isRss = (article.isRss!false)?c == "true">
     <article class="post">
         <header>
             <h2>
-                <a rel="bookmark" href="${servePath}${article.articlePermalink}">
+                <a rel="bookmark" href="${isRss?then(article.articlePermalink, servePath + article.articlePermalink)}">
                     ${article.articleTitle}
                 </a>
                 <#if article.articlePutTop>
@@ -32,7 +33,7 @@
                 </#if>
                 <#if article.hasUpdated>
                     <sup>
-                        <a href="${servePath}${article.articlePermalink}">
+                        <a href="${isRss?then(article.articlePermalink, servePath + article.articlePermalink)}">
                             ${updatedLabel}
                         </a>
                     </sup>
@@ -66,14 +67,14 @@
             ${article.articleAbstract}
         </div>
         <footer class="fn-clear tags">
-            <#if article.articleCategory != "">
+            <#if article.articleCategory?? && article.articleCategory != "">
                 <a class="tag" rel="tag" href="${servePath}/category/${article.categoryURI}">所属分类 > ${article.articleCategory}</a>
             </#if>
             <#list article.articleTags?split(",") as articleTag>
                 <a class="tag" rel="tag" href="${servePath}/tags/${articleTag?url('UTF-8')}">
                     ${articleTag}</a>
             </#list>
-            <a href="${servePath}${article.articlePermalink}#more" rel="contents" class="fn-right">
+            <a href="${isRss?then(article.articlePermalink, servePath + article.articlePermalink)}" rel="contents" class="fn-right">
                 ${readLabel} &raquo;
             </a>
         </footer>
