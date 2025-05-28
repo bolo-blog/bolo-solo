@@ -20,9 +20,10 @@
 <main id="main" class="site-main" role="main">
 <h1 class="main-title" style="font-family: 'Ubuntu', sans-serif;"><i class="fa fa-envira" aria-hidden="true"></i> 文章</h1>
 <#list articles as article>
+<#assign isRss = (article.isRss!false)?c == "true">
 <article class="post post-list-thumb" itemscope="" itemtype="http://schema.org/BlogPosting">
     <div class="post-thumb">
-        <a href="${servePath}${article.articlePermalink}">
+        <a href="${isRss?then(article.articlePermalink, servePath + article.articlePermalink)}">
             <img class="lazyload" referrerpolicy="origin" src="${article.articleImg1URL}" onerror="imgError(this,3)" data-src="${article.articleImg1URL}">
         </a>
     </div>
@@ -34,7 +35,7 @@
                 </#if>
                 <i class="iconfont icon-time"></i>${article.articleCreateDate?string("yyyy年MM月dd日 HH:mm:ss")}
             </div>
-            <a href="${servePath}${article.articlePermalink}" class="post-title">
+            <a href="${isRss?then(article.articlePermalink, servePath + article.articlePermalink)}" class="post-title">
                 <h3>${article.articleTitle}</h3>
             </a>
             <div class="post-meta">
@@ -42,7 +43,7 @@
                 <#if interactive == "on">
                     <span class="comments-number"><i class="iconfont icon-mark"></i><a href="javascript:void(0);">${article.articleCommentCount} 条评论</a></span>
                 </#if>
-                <#if article.articleCategory != "">
+                <#if article.articleCategory?? && article.articleCategory != "">
                 <span><i class="iconfont icon-file"></i><a href="${servePath}/category/${article.categoryURI}">${article.articleCategory}</a></span>
                 </#if>
             </div>
@@ -50,7 +51,7 @@
                 <p>
                     ${article.articleAbstractText}
                 <div class="post-bottom">
-                    <a href="${servePath}${article.articlePermalink}" class="button-normal"><i class="iconfont icon-caidan"></i></a>
+                    <a href="${isRss?then(article.articlePermalink, servePath + article.articlePermalink)}" class="button-normal"><i class="iconfont icon-caidan"></i></a>
                 </div>
             </div>
         </div>

@@ -69,6 +69,8 @@
                             class="fa fa-home faa-horizontal" aria-hidden="true"></i> 首页</span></a>
         <li><a href="${servePath}/links.html"><span class="faa-parent animated-hover"><i
                             class="fa fa-link faa-horizontal" aria-hidden="true"></i> 友链</span></a>
+        <li><a href="${servePath}/follows.html"><span class="faa-parent animated-hover"><i
+                            class="fa link faa-horizontal" aria-hidden="true"></i> 关注</span></a>
         <li><a href="${servePath}/tags.html"><span class="faa-parent animated-hover"><i
                             class="fa fa-tag faa-horizontal" aria-hidden="true"></i> 标签</span></a>
         <li><a href="${servePath}/archives.html"><span class="faa-parent animated-hover"><i

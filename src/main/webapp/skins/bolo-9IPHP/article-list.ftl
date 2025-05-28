@@ -74,7 +74,7 @@
                 <a class="tag" rel="tag" href="${servePath}/tags/${articleTag?url('UTF-8')}">
                     ${articleTag}</a>
             </#list>
-            <a href="${isRss?then(article.articlePermalink, servePath + article.articlePermalink)}" rel="contents" class="fn-right">
+            <a href="${isRss?then(article.articlePermalink, servePath + article.articlePermalink)}#more" rel="contents" class="fn-right">
                 ${readLabel} &raquo;
             </a>
         </footer>
