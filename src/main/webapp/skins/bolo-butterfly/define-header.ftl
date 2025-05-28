@@ -73,7 +73,7 @@
                     </div>
                     <div class="menus_item">
                         <a class="site-page" href="${servePath}/follows.html">
-                            <i class="fa-fw fas fa-link"></i>
+                            <i class="fa-fw fas fa-user-friends"></i>
                             <span> 我的关注</span>
                         </a>
                     </div>
