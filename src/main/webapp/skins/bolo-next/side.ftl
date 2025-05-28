@@ -112,6 +112,19 @@
             </#list>
         </div>
         </#if>
+        <#if 0 != follows?size>
+        <div class="links-of-author">
+            <p class="site-author-name">Follows</p>
+            <#list follows as follow>
+            <span class="links-of-author-item">
+                <a rel="friend" href="${servePath}/follow/articles/${follow.followTitle}" 
+                   title="${follow.followDescription}" target="_blank">
+                    ${follow.followTitle}
+                </a>
+            </span>
+            </#list>
+        </div>
+        </#if>
     </section>
     </#if>
 </aside>

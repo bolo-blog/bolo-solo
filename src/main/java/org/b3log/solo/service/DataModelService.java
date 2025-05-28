@@ -1095,6 +1095,10 @@ public class DataModelService {
                 fillLinks(dataModel);
             }
 
+            if (Templates.hasExpression(template, "<#list follows as follow>")) {
+                fillFollows(dataModel);
+            }
+
             if (Templates.hasExpression(template, "<#list recentComments as comment>")) {
                 fillRecentComments(dataModel, preference);
             }
