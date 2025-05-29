@@ -1,21 +1,16 @@
 <#--
-
     Bolo - A stable and beautiful blogging system based in Solo.
     Copyright (c) 2020-present, https://github.com/bolo-blog
-
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
     GNU Affero General Public License for more details.
-
     You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
+    along with this program. If not, see <https://www.gnu.org/licenses />.
 -->
 <div class="bg"></div>
 <div class="bg bg--1"></div>
@@ -26,48 +21,59 @@
 <header class="header">
     <div class="header__wrap">
         <a href="${servePath}" rel="start" class="header__logo">
-            <i class="icon__home"></i>   ${blogTitle}
+            <i class="icon__home"></i>
+            ${blogTitle}
         </a>
-
         <nav class="mobile__hidden header__nav">
             <#list pageNavigations as page>
                 <a href="${page.pagePermalink}" target="${page.pageOpenTarget}" rel="section">
-                    <#if page.pageIcon != ''><img class="page-icon" src="${page.pageIcon}"></#if>${page.pageTitle}
+                    <#if page.pageIcon !=''><img class="page-icon" src="${page.pageIcon}"></#if>
+                    ${page.pageTitle}
                 </a>
             </#list>
-            <#if interactive == "on">
-            <a href="${servePath}/dynamic.html" rel="section">
-                <i class="icon__refresh"></i> ${dynamicLabel}
-            </a>
+            <#if interactive=="on">
+                <a href="${servePath}/dynamic.html" rel="section">
+                    <i class="icon__refresh"></i>
+                    ${dynamicLabel}
+                </a>
             </#if>
             <a href="${servePath}/tags.html" rel="section">
-                <i class="icon__tags"></i> ${allTagsLabel}
+                <i class="icon__tags"></i>
+                ${allTagsLabel}
             </a>
             <a href="${servePath}/archives.html">
-                <i class="icon__inbox"></i> ${archiveLabel}
+                <i class="icon__inbox"></i>
+                ${archiveLabel}
             </a>
             <a rel="archive" href="${servePath}/links.html">
-                <i class="icon__link"></i> ${linkLabel}
+                <i class="icon__link"></i>
+                ${linkLabel}
+            </a>
+            <a rel="archive" href="${servePath}/follows.html">
+                <i class="icon__link"></i>
+                ${followLabel}
             </a>
             <a rel="alternate" href="${servePath}/rss.xml" rel="section">
                 <i class="icon__rss"></i> RSS
             </a>
         </nav>
-
         <div class="header__login">
-            <#if interactive == "on">
-             <#if isLoggedIn>
-                 <a href="${servePath}/admin-index.do#main" title="${adminLabel}">
-                     <i class="icon__setting"></i> ${adminLabel}
-                 </a>
-                 <a href="${logoutURL}">
-                     <i class="icon__logout"></i> ${logoutLabel}
-                 </a>
-             <#else>
-                    <a href="${servePath}/start">
-                        <i class="icon__login"></i> ${startToUseLabel}
+            <#if interactive=="on">
+                <#if isLoggedIn>
+                    <a href="${servePath}/admin-index.do#main" title="${adminLabel}">
+                        <i class="icon__setting"></i>
+                        ${adminLabel}
                     </a>
-             </#if>
+                    <a href="${logoutURL}">
+                        <i class="icon__logout"></i>
+                        ${logoutLabel}
+                    </a>
+                    <#else>
+                        <a href="${servePath}/start">
+                            <i class="icon__login"></i>
+                            ${startToUseLabel}
+                        </a>
+                </#if>
             </#if>
         </div>
     </div>
@@ -78,53 +84,61 @@
     <i class="icon__more" onclick="$(this).next().slideToggle()"></i>
     <main class="module__list">
         <ul>
-            <#if interactive == "on">
-        <#if isLoggedIn>
-            <li>
-                <a href="${servePath}/admin-index.do#main" title="${adminLabel}">
-                    <i class="icon__setting"></i> ${adminLabel}
-                </a>
-            </li>
-            <li>
-                <a href="${logoutURL}">
-                    <i class="icon__logout"></i> ${logoutLabel}
-                </a>
-            </li>
-        <#else>
+            <#if interactive=="on">
+                <#if isLoggedIn>
+                    <li>
+                        <a href="${servePath}/admin-index.do#main" title="${adminLabel}">
+                            <i class="icon__setting"></i>
+                            ${adminLabel}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="${logoutURL}">
+                            <i class="icon__logout"></i>
+                            ${logoutLabel}
+                        </a>
+                    </li>
+                    <#else>
+                        <li>
+                            <a href="${servePath}/start">
+                                <i class="icon__login"></i>
+                                ${startToUseLabel}
+                            </a>
+                        </li>
+                </#if>
+            </#if>
+            <#list pageNavigations as page>
                 <li>
-                    <a href="${servePath}/start">
-                        <i class="icon__login"></i> ${startToUseLabel}
+                    <a href="${page.pagePermalink}" target="${page.pageOpenTarget}" rel="section">
+                        <#if page.pageIcon !=''><img class="page-icon" src="${page.pageIcon}"></#if>
+                        ${page.pageTitle}
                     </a>
                 </li>
-        </#if>
-            </#if>
-        <#list pageNavigations as page>
-            <li>
-                <a href="${page.pagePermalink}" target="${page.pageOpenTarget}" rel="section">
-                    <#if page.pageIcon != ''><img class="page-icon" src="${page.pageIcon}"></#if>${page.pageTitle}
-                </a>
-            </li>
-        </#list>
-            <#if interactive == "on">
-            <li>
-                <a href="${servePath}/dynamic.html" rel="section">
-                    <i class="icon__refresh"></i> ${dynamicLabel}
-                </a>
-            </li>
+            </#list>
+            <#if interactive=="on">
+                <li>
+                    <a href="${servePath}/dynamic.html" rel="section">
+                        <i class="icon__refresh"></i>
+                        ${dynamicLabel}
+                    </a>
+                </li>
             </#if>
             <li>
                 <a href="${servePath}/tags.html" rel="section">
-                    <i class="icon__tags"></i> ${allTagsLabel}
+                    <i class="icon__tags"></i>
+                    ${allTagsLabel}
                 </a>
             </li>
             <li>
                 <a href="${servePath}/archives.html">
-                    <i class="icon__inbox"></i> ${archiveLabel}
+                    <i class="icon__inbox"></i>
+                    ${archiveLabel}
                 </a>
             </li>
             <li>
                 <a rel="archive" href="${servePath}/links.html">
-                    <i class="icon__link"></i> ${linkLabel}
+                    <i class="icon__link"></i>
+                    ${linkLabel}
                 </a>
             </li>
             <li>
