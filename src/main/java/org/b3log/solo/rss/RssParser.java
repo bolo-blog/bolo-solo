@@ -133,7 +133,7 @@ public class RssParser {
                 article.put(Article.ARTICLE_COMMENT_COUNT, 0);
                 article.put(Article.ARTICLE_T_CREATE_DATE, new Date(article.optLong(Article.ARTICLE_CREATED)));
                 article.put(Article.ARTICLE_T_UPDATE_DATE, new Date(article.optLong(Article.ARTICLE_UPDATED)));
-
+                article.put("articleCategory", "");
                 articles.add(article);
             }
         } catch (Exception e) {
