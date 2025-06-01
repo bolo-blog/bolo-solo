@@ -19,6 +19,7 @@ package org.b3log.solo.rss;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -61,13 +62,12 @@ public class RssParser {
             if (feedDesc == null || feedDesc.isEmpty()) {
                 feedDesc = feed.getTitle();
             }
-            List<JSONObject> emptyToc = new ArrayList<>();
             for (SyndEntry entry : feed.getEntries()) {
                 final JSONObject article = new JSONObject();
                 article.put(Option.ID_C_BLOG_TITLE, feed.getTitle());
                 article.put(Option.ID_C_BLOG_SUBTITLE, feedDesc);
                 article.put(Common.AUTHOR_ID, "");
-                article.put(Article.ARTICLE_T_TOC, (Object) emptyToc);
+                article.put(Article.ARTICLE_T_TOC, (Object) Collections.emptyList());
                 article.put(Article.ARTICLE_AUTHOR_ID, userName);
                 article.put(Keys.OBJECT_ID, entry.getAuthor());
                 article.put(Common.AUTHOR_NAME, entry.getAuthor());
