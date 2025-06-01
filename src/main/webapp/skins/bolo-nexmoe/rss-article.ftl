@@ -96,11 +96,6 @@
                                     </div>
                                 </#if>
                             </div>
-                            <div class="post__toc">
-                                <#if article?? && article.articleToC?? && article.articleToC?size &gt; 0>
-                                    <#include "../../common-template/toc.ftl" />
-                                </#if>
-                            </div>
                             <#if interactive=="on">
                                 <@comments commentList=articleComments article=article></@comments>
                             </#if>
