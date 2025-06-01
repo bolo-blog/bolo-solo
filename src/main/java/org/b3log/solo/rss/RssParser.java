@@ -67,7 +67,7 @@ public class RssParser {
                 article.put(Option.ID_C_BLOG_TITLE, feed.getTitle());
                 article.put(Option.ID_C_BLOG_SUBTITLE, feedDesc);
                 article.put(Common.AUTHOR_ID, "");
-                article.put(Article.ARTICLE_T_TOC, emptyToc);
+                article.put(Article.ARTICLE_T_TOC, (Object) emptyToc);
                 article.put(Article.ARTICLE_AUTHOR_ID, userName);
                 article.put(Keys.OBJECT_ID, entry.getAuthor());
                 article.put(Common.AUTHOR_NAME, entry.getAuthor());
