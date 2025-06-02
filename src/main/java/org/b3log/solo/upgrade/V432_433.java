@@ -55,6 +55,10 @@ public final class V432_433 {
         try {
             // usite添加个人简历
             JSONObject usiteJsonObject = optionQueryService.getOptionById(Option.ID_C_USITE);
+            if (null == usiteJsonObject) {
+                // 如果没设置过则跳过 https://github.com/bolo-blog/bolo-solo/issues/307
+                return;
+            }
             String optionValueJson = usiteJsonObject.optString(Option.OPTION_VALUE);
             usiteJsonObject.put(Option.OPTION_VALUE, new JSONObject(optionValueJson).put("usiteResume", "").toString());
             optionMgmtService.addOrUpdateOption(usiteJsonObject);
