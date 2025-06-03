@@ -74,15 +74,18 @@ public class PermalinkQueryService {
             "/admin-about.do", "/start"
     };
 
+    private final static Pattern pattern = Pattern.compile("/articles/(?:\\d{4}/\\d{2}/\\d{2}/)?\\d+\\.html");
+
     /**
      * Checks whether the specified article permalink matches the system generated
      * format pattern ("/articles/yyyy/MM/dd/${articleId}.html").
-     *
+     * format pattern ("/articles/${articleId}.html").
+     * 
      * @param permalink the specified permalink
      * @return {@code true} if matches, returns {@code false} otherwise
      */
     public static boolean matchDefaultArticlePermalinkFormat(final String permalink) {
-        final Pattern pattern = Pattern.compile("/articles/\\d{4}/\\d{2}/\\d{2}/\\d+\\.html");
+
         final Matcher matcher = pattern.matcher(permalink);
 
         return matcher.matches();
