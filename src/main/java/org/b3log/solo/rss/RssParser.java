@@ -18,6 +18,7 @@
 package org.b3log.solo.rss;
 
 import java.net.URL;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -26,6 +27,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.b3log.latke.Keys;
+import org.b3log.latke.logging.Level;
+import org.b3log.latke.logging.Logger;
 import org.b3log.solo.model.Article;
 import org.b3log.solo.model.Common;
 import org.b3log.solo.model.Option;
@@ -43,6 +46,8 @@ public class RssParser {
     private String rssUrl;
     private String userIcon;
     private String userName;
+
+    private static final Logger LOGGER = Logger.getLogger(RssParser.class);
 
     public RssParser(String rssUrl, String userIcon, String userName) {
         this.rssUrl = rssUrl;
@@ -62,6 +67,7 @@ public class RssParser {
             if (feedDesc == null || feedDesc.isEmpty()) {
                 feedDesc = feed.getTitle();
             }
+            Instant now = Instant.now();
             for (SyndEntry entry : feed.getEntries()) {
                 final JSONObject article = new JSONObject();
                 article.put(Option.ID_C_BLOG_TITLE, feed.getTitle());
@@ -114,6 +120,10 @@ public class RssParser {
                 } else {
                     time = entry.getPublishedDate();
                 }
+                if (time == null) {
+                    time = new Date(now.toEpochMilli());
+                    now = now.minusSeconds(600);
+                }
                 // 设置文章封面
                 Optional<SyndEnclosure> optionalEnclosure = entry.getEnclosures().stream()
                         .filter(enclosure -> enclosure.getType().startsWith("image/"))
@@ -140,7 +150,7 @@ public class RssParser {
                 articles.add(article);
             }
         } catch (Exception e) {
-            System.out.println("Error parsing RSS feed: " + e.getMessage());
+            LOGGER.log(Level.ERROR, "Error parsing RSS feed: {0}", e.getMessage());
         }
         return articles;
     }
