@@ -361,7 +361,7 @@ public class FollowService {
                     new Object[] { followName, articles.size() });
             articleCache.putArticles(followName, articles.stream()
                     .collect(Collectors.toMap(article -> article.optString(Article.ARTICLE_TITLE),
-                            Function.identity())));
+                            Function.identity(), (existing, replacement) -> existing)));
         } catch (final Throwable e) {
             LOGGER.log(Level.ERROR, "Syncs follow articles failed", e);
         }
