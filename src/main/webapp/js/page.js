@@ -122,7 +122,7 @@ $.extend(Page.prototype, {
                                     button: "好",
                                 });
                             } else {
-                                $.cookie('my_email', email, {expires: 7, path: '/'});
+                                $.cookie('my_email', email, { expires: 7, path: '/' });
                                 that.submitComment();
                             }
                         }
@@ -227,9 +227,9 @@ $.extend(Page.prototype, {
         if ($editor.css('bottom') === '-300px' || commentId) {
             $('#soloEditorError').text('');
             if ($(window).width() < 768) {
-                $editor.css({'top': '0', 'bottom': 'auto', 'opacity': 1})
+                $editor.css({ 'top': '0', 'bottom': 'auto', 'opacity': 1 })
             } else {
-                $editor.css({'bottom': '0', top: 'auto', 'opacity': 1})
+                $editor.css({ 'bottom': '0', top: 'auto', 'opacity': 1 })
             }
 
             this.currentCommentId = commentId;
@@ -238,7 +238,7 @@ $.extend(Page.prototype, {
                 vditor.focus()
             }
         } else {
-            $editor.css({'bottom': '-300px', top: 'auto', 'opacity': 0})
+            $editor.css({ 'bottom': '-300px', top: 'auto', 'opacity': 0 })
         }
     },
     /*
@@ -262,7 +262,7 @@ $.extend(Page.prototype, {
                 for (var i = 0; i < randomArticles.length; i++) {
                     var article = randomArticles[i];
                     var title = article.articleTitle;
-                    var randomArticleLiHtml = '<li>' + '<a rel=\'nofollow\' title=\'' +
+                    var randomArticleLiHtml = '<li>' + '<a style="color: #000000; font-weight: bold;" rel=\'nofollow\' title=\'' +
                         title + '\' href=\'' + Label.servePath +
                         article.articlePermalink + '\'>' + title + '</a></li>';
                     listHtml += randomArticleLiHtml
@@ -296,7 +296,7 @@ $.extend(Page.prototype, {
                     var article = articles[i];
                     var title = article.articleTitle;
                     var articleLiHtml = '<li>'
-                        + '<a rel=\'nofollow\' title=\'' + title + '\' href=\'' +
+                        + '<a style="color: #000000; font-weight: bold;" rel=\'nofollow\' title=\'' + title + '\' href=\'' +
                         Label.servePath + article.articlePermalink + '\'>'
                         + title + '</a></li>';
                     listHtml += articleLiHtml
