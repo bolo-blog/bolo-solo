@@ -17,18 +17,21 @@
  */
 package org.b3log.solo.upgrade;
 
+import java.util.List;
+
 import org.b3log.latke.Latkes;
 import org.b3log.latke.ioc.BeanManager;
 import org.b3log.latke.logging.Level;
 import org.b3log.latke.logging.Logger;
-import org.b3log.latke.repository.*;
+import org.b3log.latke.repository.CompositeFilterOperator;
+import org.b3log.latke.repository.FilterOperator;
+import org.b3log.latke.repository.PropertyFilter;
+import org.b3log.latke.repository.Query;
+import org.b3log.latke.repository.Transaction;
 import org.b3log.solo.model.Option;
 import org.b3log.solo.repository.ArchiveDateArticleRepository;
-import org.b3log.solo.repository.ArchiveDateRepository;
 import org.b3log.solo.repository.OptionRepository;
 import org.json.JSONObject;
-
-import java.util.List;
 
 /**
  * Upgrade script from v3.6.6 to v3.6.7.
@@ -57,8 +60,8 @@ public final class V366_367 {
 
         final BeanManager beanManager = BeanManager.getInstance();
         final OptionRepository optionRepository = beanManager.getReference(OptionRepository.class);
-        final ArchiveDateRepository archiveDateRepository = beanManager.getReference(ArchiveDateRepository.class);
-        final ArchiveDateArticleRepository archiveDateArticleRepository = beanManager.getReference(ArchiveDateArticleRepository.class);
+        final ArchiveDateArticleRepository archiveDateArticleRepository = beanManager
+                .getReference(ArchiveDateArticleRepository.class);
         try {
             final Transaction transaction = optionRepository.beginTransaction();
 
@@ -84,7 +87,8 @@ public final class V366_367 {
                 final String archiveDateId = archiveDateArticle.optString("archiveDate_oId");
                 archiveDateArticleRepository.remove(new Query().setFilter(CompositeFilterOperator.and(
                         new PropertyFilter("archiveDate_oId", FilterOperator.EQUAL, archiveDateId),
-                        new PropertyFilter("article_oId", FilterOperator.EQUAL, archiveDateArticle.optString("article_oId")),
+                        new PropertyFilter("article_oId", FilterOperator.EQUAL,
+                                archiveDateArticle.optString("article_oId")),
                         new PropertyFilter("oId", FilterOperator.NOT_EQUAL, archiveDateArticle.optString("oId")))));
                 while (i < archiveDateArticles.size() - 1) {
                     if (!archiveDateId.equalsIgnoreCase(archiveDateArticles.get(i + 1).optString("archiveDate_oId"))) {

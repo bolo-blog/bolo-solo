@@ -17,6 +17,10 @@
  */
 package org.b3log.solo.service;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.b3log.latke.Keys;
 import org.b3log.latke.ioc.Inject;
@@ -37,16 +41,11 @@ import org.b3log.solo.model.Common;
 import org.b3log.solo.repository.ArticleRepository;
 import org.b3log.solo.repository.CommentRepository;
 import org.b3log.solo.repository.PageRepository;
-import org.b3log.solo.util.Emotions;
 import org.b3log.solo.util.Markdowns;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Comment query service.
@@ -158,8 +157,8 @@ public class CommentQueryService {
             final int pageSize = requestJSONObject.getInt(Pagination.PAGINATION_PAGE_SIZE);
             final int windowSize = requestJSONObject.getInt(Pagination.PAGINATION_WINDOW_SIZE);
 
-            final Query query = new Query().setPage(currentPageNum, pageSize).
-                    addSort(Comment.COMMENT_CREATED, SortDirection.DESCENDING);
+            final Query query = new Query().setPage(currentPageNum, pageSize).addSort(Comment.COMMENT_CREATED,
+                    SortDirection.DESCENDING);
             final JSONObject result = commentRepository.get(query);
             final JSONArray comments = result.getJSONArray(Keys.RESULTS);
 

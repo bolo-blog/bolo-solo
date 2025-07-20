@@ -17,8 +17,6 @@
  */
 package org.b3log.solo.service;
 
-import jodd.http.HttpRequest;
-import jodd.http.HttpResponse;
 import org.apache.commons.lang.StringUtils;
 import org.b3log.latke.Keys;
 import org.b3log.latke.Latkes;
@@ -44,7 +42,8 @@ import org.b3log.solo.repository.UserRepository;
 import org.b3log.solo.util.Solos;
 import org.json.JSONObject;
 
-import javax.servlet.http.HttpServletResponse;
+import jodd.http.HttpRequest;
+import jodd.http.HttpResponse;
 
 /**
  * User management service.
@@ -124,12 +123,11 @@ public class UserMgmtService {
 
         JSONObject usite;
         try {
-            final JSONObject requestJSON = new JSONObject().
-                    put(User.USER_NAME, userName).
-                    put(UserExt.USER_B3_KEY, userB3Key);
-            final HttpResponse res = HttpRequest.post("https://" + Global.HACPAI_DOMAIN + "/user/usite").
-                    connectionTimeout(3000).timeout(7000).header("User-Agent", Solos.USER_AGENT).
-                    body(requestJSON.toString()).send();
+            final JSONObject requestJSON = new JSONObject().put(User.USER_NAME, userName).put(UserExt.USER_B3_KEY,
+                    userB3Key);
+            final HttpResponse res = HttpRequest.post("https://" + Global.HACPAI_DOMAIN + "/user/usite")
+                    .connectionTimeout(3000).timeout(7000).header("User-Agent", Solos.USER_AGENT)
+                    .body(requestJSON.toString()).send();
             if (200 != res.statusCode()) {
                 return;
             }

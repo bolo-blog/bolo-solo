@@ -17,16 +17,20 @@
  */
 package org.b3log.solo.repository;
 
+import java.util.List;
+
 import org.b3log.latke.Keys;
 import org.b3log.latke.ioc.BeanManager;
-import org.b3log.latke.repository.*;
+import org.b3log.latke.repository.AbstractRepository;
+import org.b3log.latke.repository.FilterOperator;
+import org.b3log.latke.repository.PropertyFilter;
+import org.b3log.latke.repository.Query;
+import org.b3log.latke.repository.RepositoryException;
+import org.b3log.latke.repository.SortDirection;
 import org.b3log.latke.repository.annotation.Repository;
-import org.b3log.solo.model.Article;
 import org.b3log.solo.model.Category;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.List;
 
 /**
  * Category repository.
@@ -53,7 +57,9 @@ public class CategoryRepository extends AbstractRepository {
      * @throws RepositoryException repository exception
      */
     public JSONObject getByTitle(final String categoryTitle) throws RepositoryException {
-        final Query query = new Query().setFilter(new PropertyFilter(Category.CATEGORY_TITLE, FilterOperator.EQUAL, categoryTitle)).setPageCount(1);
+        final Query query = new Query()
+                .setFilter(new PropertyFilter(Category.CATEGORY_TITLE, FilterOperator.EQUAL, categoryTitle))
+                .setPageCount(1);
         final JSONObject result = get(query);
         final JSONArray array = result.optJSONArray(Keys.RESULTS);
         if (0 == array.length()) {
@@ -71,7 +77,9 @@ public class CategoryRepository extends AbstractRepository {
      * @throws RepositoryException repository exception
      */
     public JSONObject getByURI(final String categoryURI) throws RepositoryException {
-        final Query query = new Query().setFilter(new PropertyFilter(Category.CATEGORY_URI, FilterOperator.EQUAL, categoryURI)).setPageCount(1);
+        final Query query = new Query()
+                .setFilter(new PropertyFilter(Category.CATEGORY_URI, FilterOperator.EQUAL, categoryURI))
+                .setPageCount(1);
         final JSONObject result = get(query);
         final JSONArray array = result.optJSONArray(Keys.RESULTS);
         if (0 == array.length()) {
@@ -111,8 +119,10 @@ public class CategoryRepository extends AbstractRepository {
             return null;
         }
 
-        final Query query = new Query().setFilter(new PropertyFilter(Category.CATEGORY_ORDER, FilterOperator.LESS_THAN, category.optInt(Category.CATEGORY_ORDER))).
-                addSort(Category.CATEGORY_ORDER, SortDirection.DESCENDING).setPage(1, 1);
+        final Query query = new Query()
+                .setFilter(new PropertyFilter(Category.CATEGORY_ORDER, FilterOperator.LESS_THAN,
+                        category.optInt(Category.CATEGORY_ORDER)))
+                .addSort(Category.CATEGORY_ORDER, SortDirection.DESCENDING).setPage(1, 1);
         final JSONObject result = get(query);
         final JSONArray array = result.optJSONArray(Keys.RESULTS);
         if (1 != array.length()) {
@@ -135,8 +145,10 @@ public class CategoryRepository extends AbstractRepository {
             return null;
         }
 
-        final Query query = new Query().setFilter(new PropertyFilter(Category.CATEGORY_ORDER, FilterOperator.GREATER_THAN, category.optInt(Category.CATEGORY_ORDER))).
-                addSort(Category.CATEGORY_ORDER, SortDirection.ASCENDING).setPage(1, 1);
+        final Query query = new Query()
+                .setFilter(new PropertyFilter(Category.CATEGORY_ORDER, FilterOperator.GREATER_THAN,
+                        category.optInt(Category.CATEGORY_ORDER)))
+                .addSort(Category.CATEGORY_ORDER, SortDirection.ASCENDING).setPage(1, 1);
         final JSONObject result = get(query);
         final JSONArray array = result.optJSONArray(Keys.RESULTS);
         if (1 != array.length()) {
@@ -154,7 +166,8 @@ public class CategoryRepository extends AbstractRepository {
      * @throws RepositoryException repository exception
      */
     public JSONObject getByOrder(final int order) throws RepositoryException {
-        final Query query = new Query().setFilter(new PropertyFilter(Category.CATEGORY_ORDER, FilterOperator.EQUAL, order));
+        final Query query = new Query()
+                .setFilter(new PropertyFilter(Category.CATEGORY_ORDER, FilterOperator.EQUAL, order));
         final JSONObject result = get(query);
         final JSONArray array = result.optJSONArray(Keys.RESULTS);
         if (0 == array.length()) {
@@ -172,8 +185,8 @@ public class CategoryRepository extends AbstractRepository {
      * @throws RepositoryException repository exception
      */
     public List<JSONObject> getMostUsedCategories(final int num) throws RepositoryException {
-        final Query query = new Query().addSort(Category.CATEGORY_ORDER, SortDirection.ASCENDING).
-                setPage(1, num).setPageCount(1);
+        final Query query = new Query().addSort(Category.CATEGORY_ORDER, SortDirection.ASCENDING).setPage(1, num)
+                .setPageCount(1);
         final List<JSONObject> ret = getList(query);
 
         final BeanManager beanManager = BeanManager.getInstance();
@@ -183,7 +196,8 @@ public class CategoryRepository extends AbstractRepository {
 
         for (final JSONObject category : ret) {
             final String categoryId = category.optString(Keys.OBJECT_ID);
-            final JSONArray categoryTags = categoryTagRepository.getByCategoryId(categoryId, 1, Integer.MAX_VALUE).optJSONArray(Keys.RESULTS);
+            final JSONArray categoryTags = categoryTagRepository.getByCategoryId(categoryId, 1, Integer.MAX_VALUE)
+                    .optJSONArray(Keys.RESULTS);
             /* final StringBuilder queryCount = new StringBuilder("SELECT count(DISTINCT(b3_solo_article.oId)) as C FROM ");
             final StringBuilder queryStr = new StringBuilder(articleRepository.getName() + " AS b3_solo_article,").
                     append(tagArticleRepository.getName() + " AS b3_solo_tag_article").
