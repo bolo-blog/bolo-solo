@@ -66,8 +66,9 @@ public final class GitHubs {
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         JSONArray compatibleResult = new JSONArray();
         try {
+            String githubHome = githubUserId + "/" + githubUserId;
             while (true) {
-                HttpResponse res = HttpRequest.get("https://api.github.com/users/" + githubUserId + "/repos??sort=updated&per_page=50&type=public&page=" + page).
+                HttpResponse res = HttpRequest.get("https://api.github.com/users/" + githubUserId + "/repos?sort=updated&per_page=50&type=public&page=" + page).
                         connectionTimeout(20000).timeout(60000).header("User-Agent", Solos.USER_AGENT).send();
                 if (HttpServletResponse.SC_OK != res.statusCode()) {
                     return null;
@@ -82,7 +83,11 @@ public final class GitHubs {
                     JSONObject resultObject = result.optJSONObject(i);
                     JSONObject compatibleObject = new JSONObject();
 
-                    if (resultObject.getBoolean("fork")) {
+                    if (resultObject.getBoolean("fork") || resultObject.getBoolean("disabled")) {
+                        continue;
+                    }
+
+                    if (githubHome.equals(resultObject.get("githubrepoFullName"))) {
                         continue;
                     }
 
@@ -104,7 +109,6 @@ public final class GitHubs {
 
                     compatibleResult.put(compatibleObject);
                 }
-                page++;
             }
             // 排序
             ArrayList<String> tempResultList = new ArrayList<>();
