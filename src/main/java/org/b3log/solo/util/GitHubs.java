@@ -87,7 +87,7 @@ public final class GitHubs {
                         continue;
                     }
 
-                    if (githubHome.equals(resultObject.get("githubrepoFullName"))) {
+                    if (githubHome.equals(resultObject.get("full_name"))) {
                         continue;
                     }
 
