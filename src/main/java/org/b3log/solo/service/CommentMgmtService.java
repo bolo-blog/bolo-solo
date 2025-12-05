@@ -466,18 +466,18 @@ public class CommentMgmtService {
                 final String localaid = entry.getKey().split("_")[1];
                 final String remoteaid = (String) entry.getValue();
                 if (localaid != null && remoteaid != null) {
-                    LOGGER.log(Level.INFO, String.format("===> Article: %s , PAGE 1 <===", localaid));
+                    LOGGER.log(Level.DEBUG, String.format("===> Article: %s , PAGE 1 <===", localaid));
                     int pageCount = syncCommentFromFishPI(
                             Long.parseLong(localaid),
                             Long.parseLong(remoteaid),
                             1);
                     if (pageCount == -1) {
-                        LOGGER.log(Level.ERROR, "评论同步失败，无法连接到摸鱼派服务器或 apiKey 错误。");
+                        LOGGER.log(Level.WARN, "评论同步失败，无法连接到摸鱼派服务器或 apiKey 错误。");
                     } else if (pageCount == 0) {
-                        LOGGER.log(Level.ERROR, "远端文章评论为空");
+                        LOGGER.log(Level.WARN, "远端文章评论为空");
                     } else if (pageCount > 1) {
                         for (int i = 2; i <= pageCount; i++) {
-                            LOGGER.log(Level.INFO,
+                            LOGGER.log(Level.DEBUG,
                                     String.format("===> Article: %s , PAGE %s <===", localaid, i));
                             syncCommentFromFishPI(
                                     Long.parseLong(localaid),
@@ -528,10 +528,12 @@ public class CommentMgmtService {
 
                 String id = object.optString("oId");
                 if (commpentMaps.containsKey(id)) {
-                    System.out.println("Import content skip: " + commentContent);
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.log(Level.DEBUG, "Import content skip: " + commentContent);
+                    }
                     continue;
                 }
-                System.out.println("Import content: " + commentContent);
+                LOGGER.log(Level.INFO, "Import content: " + commentContent);
                 String link = String.format("https://%s/member/%s", Global.FISH_PI_DOMAIN,
                         object.optString("commentAuthorName"));
                 String avatar = object.optString("commentAuthorThumbnailURL");

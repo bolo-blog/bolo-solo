@@ -305,6 +305,9 @@ public class ExportService {
         if (null == preference) {
             return;
         }
+        if (Latkes.RuntimeMode.PRODUCTION != Latkes.getRuntimeMode()) {
+            return;
+        }
         String pat = preference.optString(Option.ID_C_GITHUB_PAT);
         if (StringUtils.isBlank(pat)) {
             return;
