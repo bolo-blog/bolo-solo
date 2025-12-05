@@ -5,7 +5,7 @@ ADD . /tmp
 RUN cd /tmp && mvn package -DskipTests -Pci && mv target/bolo/* /opt/bolo/ \
     && cp -f /tmp/src/main/resources/docker/* /opt/bolo/WEB-INF/classes/
 
-FROM openjdk:8-alpine
+FROM openjdk:8u131-jdk-alpine
 LABEL maintainer="Liang Ding<d@b3log.org>"
 
 WORKDIR /opt/bolo/
